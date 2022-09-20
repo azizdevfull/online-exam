@@ -32,12 +32,16 @@ Route::post('/login',[AuthController::class, 'userLogin'])->name('userLogin');
 
 Route::get('/logout', [AuthController::class, 'Logout']);
 
+
 Route::group(['middleware' => ['web', 'checkAdmin']], function(){
     Route::get('/admin/dashboard', [AuthController::class, 'adminDashboard']);
 
     Route::post('/add-subject',[AdminController::class, 'addSubject'])->name('addSubject');
+    Route::post('/edit-subject',[AdminController::class, 'editSubject'])->name('editSubject');
+    Route::post('/delete-subject',[AdminController::class, 'deleteSubject'])->name('deleteSubject');
 
 });
+
 
 Route::group(['middleware' => ['web', 'checkStudent']], function(){
     Route::get('/dashboard', [AuthController::class, 'loadDashboard']);
