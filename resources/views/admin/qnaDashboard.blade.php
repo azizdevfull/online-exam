@@ -14,6 +14,7 @@
             <th>Qusetion</th>
             <th>Answers</th>
             <th>Edit</th>
+            <th>Delete</th>
         </thead>
         <tbody>
             @if (count($questions) > 0)
@@ -28,6 +29,10 @@
                         <td>
                             <button class="btn btn-info editButton" data-id="{{ $question->id }}" data-toggle="modal"
                                 data-target="#editQnaModal">Edit</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-toggle="modal"
+                                data-target="#deleteQnaModal">Delete</button>
                         </td>
                     </tr>
                 @endforeach
@@ -150,6 +155,35 @@
             </div>
         </div>
     </div>
+
+
+      <!-- Delete Q&a Modal -->
+  <div class="modal fade" id="deleteQnaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete Exam</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+      <form id="deleteQna">
+        @csrf
+        <div class="modal-body">
+          <input type="hidden" name="id" id="delete_qna_id">
+          <p>Are You Sure ?</p>
+          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+          </div>
+      </form>
+
+        </div>
+    </div>
+  </div>
+
 
 
 
@@ -449,6 +483,37 @@
 
             });
 
+
+
+
+            // Delete Q&A
+            $('.deleteButton').click(function() {
+                var id = $(this).attr('data-id');
+                $('#delete_qna_id').val(id);
+            });
+
+
+            // Delete Q&A
+            $('#deleteQna').submit(function(e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: "{{ route('deleteQna') }}",
+                    type: "POST",
+                    data:formData,
+                    success:function(data) {
+                        if(data.success == true){
+                            location.reload();
+                        }
+                        else 
+                        {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
 
 
         });
