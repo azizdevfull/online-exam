@@ -167,4 +167,11 @@ class AdminController extends Controller
             };
         }
 
+        public function getQnaDetails(Request $request)
+        {
+           $qna = Question::where('id', $request->qid)->with('answers')->get();
+
+           return response()->json([ 'data' => $qna ]);
+        }
+
 }
