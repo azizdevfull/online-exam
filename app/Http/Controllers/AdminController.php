@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answer;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
 use App\Models\Question;
-use Mockery\Matcher\Any;
+use App\Models\Answer;
+
+// use Mockery\Matcher\Any;
 
 class AdminController extends Controller
 {
@@ -173,5 +174,63 @@ class AdminController extends Controller
 
            return response()->json([ 'data' => $qna ]);
         }
+        
+        public function deleteAns(Request $request)
+        {
+            // Answer::where('id', $request->id)->delete();
+            Answer::where('id', $request->id)->delete();
+            return response()->json(['success' => true,'msg'=>'Answer deleted successfully.']);
+        }
+        public function updateQna(Request $request)
+        {
+            try {
+                
+                Question::where('id', $request->question_id)->update([
+                    'question' => $request->question
+                ]);
 
+                // old answer update
+                if(isset($request->answers)) {
+                    foreach($request->answers as $key => $value) {
+
+                        $is_correct = 0;
+                        if ($request->is_correct == $value){
+                            $is_correct = 1;
+                        }
+
+                        Answer::where('id', $key)->update([
+                            'questions_id' => $request->question_id,
+                            'answer' => $value,
+                            'is_correct' => $is_correct
+                        ]);
+
+                    }
+                }
+
+
+
+                // new answer added
+                if(isset($request->new_answers)) {
+                    foreach($request->new_answers as $answer) {
+                
+                        $is_correct = 0;
+                        if ($request->is_correct == $answer){
+                            $is_correct = 1;
+                        }
+
+                      Answer::insert([
+                        'questions_id' =>$request->question_id,
+                        'answer' => $answer,
+                        'is_correct' => $is_correct
+                      ]);
+                
+                    }
+                }
+
+                return response()->json(['success' => true,'msg'=>'Q&A updated successfully.']);
+                
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'msg'=>$e->getMessage()]);
+            };
+        }
 }

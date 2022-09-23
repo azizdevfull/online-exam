@@ -354,7 +354,7 @@
                                     <input type="text" class="w-100" name="answers[`+qna['answers'][i]['id']+`]"
                                      placeholder="Enter Answer" value="`+qna['answers'][i]['answer']+`" required>
                                 </div>
-                                <button class="btn btn-danger removeButton">Remove</button>
+                                <button class="btn btn-danger removeButton removeAnswer" data-id="`+qna['answers'][i]['id']+`">Remove</button>
                             </div>
                         `;
                     
@@ -394,7 +394,22 @@
 
                     if (checkIsCorrect) {
                     
-                        // init lecture cover
+                        var formData = $(this).serialize();
+                        
+                        $.ajax({
+                            url: "{{ route('updateQna') }}",
+                            type: "POST",
+                            data:formData,
+                            success:function(data) {
+                                if(data.success == true){
+                                    location.reload();
+                                }
+                                else{
+                                    alert(data.msg);
+                                }
+                            }
+                        });
+
 
                     } else {
                         $(".editError").text("Please select anyone correct answer.")
@@ -410,6 +425,29 @@
             });
 
 
+
+            // remove Answers
+            $(document).on('click','.removeAnswer',function() {
+                
+
+                var ansId = $(this).attr('data-id');
+
+                $.ajax({
+                    url: "{{ route('deleteAns') }}",
+                    type: "GET",
+                    data: { id:ansId},
+                    success:function(data) {
+                        if(data.success == true){
+                            console.log(data.msg);
+                        }
+                        else{
+                            alert(data.msg);
+                        }
+                    }
+                });
+
+
+            });
 
 
 
