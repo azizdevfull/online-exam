@@ -58,6 +58,10 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function(){
     Route::post('/import-qna-ans',[AdminController::class, 'importQna'])->name('importQna');
     
 
+    // students routes
+
+    Route::get('/admin/students',[AdminController::class, 'studentsDashboard']);
+
 });
 
 
