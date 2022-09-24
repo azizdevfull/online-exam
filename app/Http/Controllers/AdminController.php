@@ -12,7 +12,9 @@ use App\Models\User;
 use App\Imports\QnaImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Hash;
-use Mail;
+// use Mail;
+use Illuminate\Support\Facades\Mail;
+// use Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 
@@ -295,7 +297,7 @@ class AdminController extends Controller
 
                 Mail::send('registrationMail', ['data'=>$data], function($message) use ($data){
                     $message->to($data['email'])->subject($data['title']);
-                });
+                }); 
 
                 return response()->json(['success' => true,'msg'=>'Student added successfully.']);
 
@@ -304,6 +306,50 @@ class AdminController extends Controller
             };
         }
 
+        // update student
 
+        public function editStudent(Request $request)
+        {
+            try {
+
+                $user = User::find($request->id);
+
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->save();
+
+                $url = URL::to('/');
+
+                $data['url'] = $url;
+                $data['name'] = $request->name;
+                $data['email'] = $request->email;
+                $data['title'] = "Update Student Profile on OES";
+
+                Mail::send('updateProfileMail', ['data'=>$data], function($message) use ($data){
+                    $message->to($data['email'])->subject($data['title']);
+                }); 
+
+                return response()->json(['success' => true,'msg'=>'Student update successfully.']);
+
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'msg'=>$e->getMessage()]);
+            };
+        }
+            
+
+
+        // delete a student 
+        public function deleteStudent(Request $request)
+        {
+           
+            try {
+                User::where('id', $request->id)->delete();
+                return response()->json(['success' => true,'msg'=>'Student deleted successfully.']);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'msg'=>$e->getMessage()]);
+            };
+
+
+        }
 
 }
