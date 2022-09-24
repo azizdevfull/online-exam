@@ -8,6 +8,9 @@ use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Answer;
 
+use App\Imports\QnaImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 // use Mockery\Matcher\Any;
 
 class AdminController extends Controller
@@ -242,6 +245,18 @@ class AdminController extends Controller
             Answer::where('questions_id',$request->id)->delete();
 
             return response()->json(['success' => true,'msg'=>'Q&A deleted successfully.']);
+        }
+
+        public function importQna(Request $request)
+        {
+            try {
+                
+                Excel::import(new QnaImport, $request->file('file'));
+                return response()->json(['success' => true, 'msg'=>'Q&A imported successfully.']);
+
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'msg'=>$e->getMessage()]);
+            };
         }
 
 
