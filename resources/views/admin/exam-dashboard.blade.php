@@ -40,7 +40,7 @@
             <td>{{ $exam->time }}</td>
             <td>{{ $exam->attempt }} Time</td>
               <td>
-                <a href="#" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
+                <a href="#" class="addQuestion" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
               </td>
             <td>
               <button class="btn btn-info editButton" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#editExamModel">Edit</button>
@@ -195,12 +195,19 @@
       @csrf
       <div class="modal-body">
         <input type="hidden" name="exam_id" id="addExamId">
+        <input type="search" name="search" class="w-100" placeholder="Search Here">
         <br><br>
-        <select name="questions" multiple multiselect-search="true" multiselect-select-all="true" onchange="console.log(this.selectedOptions)">
-          <option value="hii">Hii</option>
-          <option value="hii">Bek</option>
-          <option value="hii">Aziz</option>
-        </select>
+
+        <table class="table">
+          <thead>
+            <th>Select</th>
+            <th>Question</th>
+          </thead>
+          <tbody class="addBody">
+
+          </tbody>
+        </table>
+      
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -210,7 +217,7 @@
 
       </div>
   </div>
-</div>
+</div> 
 
 
   <script>
@@ -314,6 +321,75 @@
             });
         });
 
+        // add questions part
+        $('.addQuestion').click(function(){
+
+         var id = $(this).attr('data-id');
+
+         $('#addExamId').val(id);
+
+         $.ajax({
+          url:"{{ route('getQuestions') }}",
+          type:"GET",
+          data:{exam_id:id},
+          success:function(data){
+           if (data.success == true) {
+            
+            var questions = data.data;
+              var html = '';
+               if (questions.length > 0) {
+                for (let i = 0; i < questions.length; i++) {
+                  html += `
+                  <tr>
+                      <td><input type="checkbox" value="`+ questions[i]['id'] +`" name="questions_ids[]"></td>
+                      <td>`+ questions[i]['questions'] +`</td>
+                  </tr>
+                  `;
+                }
+               }
+               else{
+                html += `
+                <tr>
+                  <td colspan="2">Question Not Available!</td>
+                  </tr>
+                `;
+               }
+
+               $(".addBody").html(html);
+
+           }
+           else
+           {
+              alert(data.msg);
+           }
+          }
+         });
+
+        });
+
+
+        $('#addQna').submit(function(e){
+            e.preventDefault();
+            
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url:"{{ route('addQuestions') }}",
+                type:"POST",
+                data:formData,
+                success:function(data){
+                    if (data.success == true) {
+                        location.reload();
+                    }
+                    else
+                    {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        
     });
   </script>
 
