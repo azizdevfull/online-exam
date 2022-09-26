@@ -231,30 +231,6 @@
 
         });
 
-        
- 
-
-        // $(document).ready(function() {
-        //     $('#addStudent').click(function(e) {
-        //         e.preventDefault();
-
-        //         var formData = $(this).serialize();
-        //         $.ajax({
-        //             url: "{{ route('addStudent') }}",
-        //             method: 'POST',
-        //             data: formData,
-        //             success: function(data) {
-        //                 if (data.success == true) {
-        //                     location.reload();
-        //                 }
-        //                 else
-        //                 {
-        //                     alert(data.msg)
-        //                 }
-        //             }
-        //         });
-        //     });
-        // });
     </script>
 
 
