@@ -239,6 +239,7 @@
           <thead>
             <th>S.No</th>
             <th>Question</th>
+            <th>Delete</th>
           </thead>
           <tbody class="seeQuestionTable">
           </tbody>
@@ -432,7 +433,7 @@
             type:"GET",
             data:{exam_id:id},
             success:function(data){
-              // console.log(data);
+              console.log(data);
 
               var html = '';
               var questions = data.data;
@@ -444,6 +445,9 @@
                     <tr>
                       <td>`+ (i + 1) +`</td>
                       <td>`+ questions[i]['question'][0]['question']+`</td>
+                      <td>
+                        <button class="btn btn-danger deleteQuestion" data-id="`+ questions[i]['id']+`">Delete</button>
+                      </td>
                     </tr>
                   `;
                   
@@ -461,6 +465,26 @@
 
               $('.seeQuestionTable').html(html);
 
+            }
+          });
+
+        });
+
+
+        // delete questions
+        $(document).on('click','.deleteQuestion',function(){
+          var id = $(this).attr('data-id');
+          var obj = $(this);
+          $.ajax({
+            url:"{{ route('deleteExamQuestions') }}",
+            type:"GET",
+            data:{id:id},
+            success:function(data){
+              if (data.success == true) {
+                obj.parent().parent().remove();
+              } else{
+                alert(data.msg);
+              }
             }
           });
 
