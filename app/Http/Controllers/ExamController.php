@@ -12,9 +12,17 @@ class ExamController extends Controller
     {
         $qnaExam = Exam::where('enterance_id', $id)->with('getQnaExam')->get();
         if (count($qnaExam) > 0) {
-           
             if ($qnaExam[0]['date'] == date('Y-m-d')){
-                return 'working';
+             
+                if(count($qnaExam[0]['getQnaExam']) > 0) {
+                    
+                    $qna = QnaExam::where('exam_id',$qnaExam[0]['id'])->with('question', 'answers')->inRandomOrder()->get();
+                    return view('student.exam-dashboard', ['success' => true,'exam'=>$qnaExam, 'qna'=>$qna]);
+                }
+                else{
+                return view('student.exam-dashboard', ['success' => false, 'msg'=>'This exam is not available for now! ','exam'=>$qnaExam]);
+                }
+                
             }
            else if ($qnaExam[0]['date'] > date('Y-m-d'))
            {
