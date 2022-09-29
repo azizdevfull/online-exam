@@ -8,7 +8,8 @@
         @php  $qcount = 1;  @endphp
         @if ($success == true)
             @if (count($qna) > 0)
-            <form action="" method="POST" class="mb-5" onsubmit="return isValid()">
+            <form action="{{ route('examSubmit') }}" method="POST" class="mb-5" onsubmit="return isValid()">
+                @csrf
                 <input type="hidden" name="exam_id" value="{{ $exam[0]['id'] }}">
                 @foreach ($qna as $data)
                     <div>

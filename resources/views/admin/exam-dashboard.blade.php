@@ -38,7 +38,7 @@
             @endforeach --}}
             <td>{{ $exam->subjects[0]['subject'] }}</td>
             <td>{{ $exam->date }}</td>
-            <td>{{ $exam->time }}</td>
+            <td>{{ $exam->time }} Hrs</td>
             <td>{{ $exam->attempt }} Time</td>
             <td>
               <a href="#" class="addQuestion" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
