@@ -45,6 +45,7 @@ class ExamController extends Controller
     public function examSubmit(Request $request)
     {
 
+
         $attempt_id = ExamAttempt::insertGetId([
             'exam_id' => $request->exam_id,
             'user_id' => Auth::user()->id
@@ -56,12 +57,14 @@ class ExamController extends Controller
         {
         
             for($i = 0; $i < $qcount; $i++){
-
+                if(!empty($request->input('ans_'.($i+1)))) {
                 ExamAnswer::insert([
                     'attempt_id' => $attempt_id,
                     'question_id' => $request->q[$i],
                     'answer_id' => request()->input('ans_'.($i+1))
                 ]);
+                }
+               
 
             }
 
