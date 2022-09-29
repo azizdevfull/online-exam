@@ -443,7 +443,8 @@ class AdminController extends Controller
 
         public function loadMarks()
         {
-            return view('admin.marksDashboard');
+           $exams = Exam::with('getQnaExam')->get();
+            return view('admin.marksDashboard', compact('exams'));
         }
 
 }
