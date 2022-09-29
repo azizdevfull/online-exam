@@ -9,7 +9,6 @@
     <div class="container">
         <p style="color:black;">Welcome, {{ Auth::user()->name }}</p>
         <h1 class="text-center">{{ $exam[0]['exam_name'] }}</h1>
-        <h4 class="text-right time">{{ $exam[0]['time'] }}</h4>
         @php  $qcount = 1;  @endphp
         @if ($success == true)
             @if (count($qna) > 0)
