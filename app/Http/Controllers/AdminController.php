@@ -441,4 +441,9 @@ class AdminController extends Controller
             };
         }
 
+        public function loadMarks()
+        {
+            return view('admin.marksDashboard');
+        }
+
 }
