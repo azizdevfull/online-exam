@@ -75,6 +75,8 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function(){
     
     // exam marks route
     Route::get('/admin/marks',[AdminController::class, 'loadMarks']);
+    Route::post('/update-marks',[AdminController::class, 'updateMarks'])->name('updateMarks');
+    
 });
 
 
