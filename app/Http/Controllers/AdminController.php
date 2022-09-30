@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
+use App\Models\ExamAttempt;
+use App\Models\User;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\QnaExam;
-use App\Models\User;
 
 use App\Imports\QnaImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -464,4 +465,10 @@ class AdminController extends Controller
             };
         }
 
+        public function reviewExams(Request $request)
+        {
+            $attempts = ExamAttempt::with(['user', 'exam'])->orderBy('id')->get();
+
+            return view('admin.review-exams', compact('attempts'));
+        }
 }
