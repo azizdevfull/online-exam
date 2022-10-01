@@ -66,7 +66,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Approved</button>
+          <button type="submit" class="btn btn-primary approved-btn">Approved</button>
         </div>
     </form>
     </div>
@@ -138,6 +138,10 @@
         //approved exam
         $('#reviewForm').submit(function(event) {
             event.preventDefault();
+
+
+            $('.approved-btn').html('Please Wait... <i class="fa fa-spinner fa-spin"></i>');
+
 
             var formData = $(this).serialize();
 
