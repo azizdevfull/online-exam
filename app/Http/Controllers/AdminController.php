@@ -158,8 +158,15 @@ class AdminController extends Controller
 
             try {
 
+                $explaination = null;
+
+                if (isset($request->explaination)) {
+                    $explaination = $request->explaination;
+                }
+
                 $questionId = Question::insertGetId([
-                    'question' => $request->question
+                    'question' => $request->question,
+                    'explaination' => $explaination
                 ]);
 
                 foreach($request->answers as $answer) {
@@ -196,12 +203,22 @@ class AdminController extends Controller
             Answer::where('id', $request->id)->delete();
             return response()->json(['success' => true,'msg'=>'Answer deleted successfully.']);
         }
+
         public function updateQna(Request $request)
         {
             try {
                 
+
+                $explaination = null;
+
+                if (isset($request->explaination)) {
+                    $explaination = $request->explaination;
+                }
+
+
                 Question::where('id', $request->question_id)->update([
-                    'question' => $request->question
+                    'question' => $request->question,
+                    'explaination' => $explaination
                 ]);
 
                 // old answer update
